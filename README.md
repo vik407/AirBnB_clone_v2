@@ -52,3 +52,10 @@ Ex:
 Additionally, the console supports `<class name>.<command>(<parameters>)` syntax.
 Ex:
 `City.show(my_city_id)`
+
+### Forked from Kevin Yook
+[AirBnB_clone](https://github.com/yook00627/AirBnB_clone)
+
+## Cohort 10 Cali Authors:
+* Victor Arteaga. [Viiic98](https://github.com/Viiic98)
+* Victor Hernandez - [vik407](https://github.com/vik407)
