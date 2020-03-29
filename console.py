@@ -51,9 +51,15 @@ class HBNBCommand(cmd.Cmd):
                     val = val.replace('_',' ').replace('"', '')
                 else:
                     if '.' in val:
-                        val = float(val)
+                        try:
+                            val = float(val)
+                        except:
+                            continue
                     else:
-                        val = int(val)
+                        try:
+                            val = int(val)
+                        except:
+                            continue
                 if hasattr(obj, key):
                     if val:
                         setattr(obj, key, val)
