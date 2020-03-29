@@ -47,9 +47,10 @@ class HBNBCommand(cmd.Cmd):
                 if '=' not in ele:
                     continue
                 key, val = ele.split('=')
-                val = val.replace('_',' ')
+                val = val.replace('_',' ').replace('"', '')
                 if hasattr(obj, key):
-                    setattr(obj, key, val)
+                    if val:
+                        setattr(obj, key, val)
             obj.save()
             print("{}".format(obj.id))
         except SyntaxError:
