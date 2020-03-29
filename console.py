@@ -47,7 +47,13 @@ class HBNBCommand(cmd.Cmd):
                 if '=' not in ele:
                     continue
                 key, val = ele.split('=')
-                val = val.replace('_',' ').replace('"', '')
+                if '"' in val:
+                    val = val.replace('_',' ').replace('"', '')
+                else:
+                    if '.' in val:
+                        val = float(val)
+                    else:
+                        val = int(val)
                 if hasattr(obj, key):
                     if val:
                         setattr(obj, key, val)
