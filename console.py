@@ -2,6 +2,7 @@
 """This is the console for AirBnB"""
 import cmd
 from models import storage
+from ast import literal_eval
 from datetime import datetime
 from models.base_model import BaseModel
 from models.user import User
@@ -43,26 +44,16 @@ class HBNBCommand(cmd.Cmd):
                 raise SyntaxError()
             my_list = line.split(" ")
             obj = eval("{}()".format(my_list[0]))
-            for ele in my_list[1:]:
-                if '=' not in ele:
-                    continue
-                key, val = ele.split('=')
-                if '"' in val:
-                    val = val.replace('_', ' ').replace('"', '\\"')
-                else:
-                    if '.' in val:
-                        try:
-                            val = float(val)
-                        except:
-                            continue
-                    else:
-                        try:
-                            val = int(val)
-                        except:
-                            continue
-                if hasattr(obj, key):
-                    if val:
-                        setattr(obj, key, val)
+            # FIX evaluate if is str, int or float
+            for item in my_list[1:]:
+                val = item.split('=')
+                item_type = literal_eval(val[1])
+                if type(item_type) is str:
+                    val[1] = val[1].replace('_', ' ')
+                    var = val[1][1:-1].replace('"', '\\"')
+                    setattr(obj, val[0], var)
+                elif type(item_type) is int or type(item_type) is float:
+                    setattr(obj, val[0], eval(val[1]))
             obj.save()
             print("{}".format(obj.id))
         except SyntaxError:
