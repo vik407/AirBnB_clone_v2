@@ -22,6 +22,8 @@ class FileStorage:
 
     def all(self, cls=None):
         """returns a dictionary
+        Args:
+            cls: class that will be returned
         Return:
             returns a dictionary of __object
             if a cls is specified only return a dictionary
