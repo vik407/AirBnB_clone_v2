@@ -48,7 +48,7 @@ class HBNBCommand(cmd.Cmd):
                     continue
                 key, val = ele.split('=')
                 if '"' in val:
-                    val = val.replace('_', ' ').replace('"', '')
+                    val = val.replace('_', ' ').replace('"', '\\"')
                 else:
                     if '.' in val:
                         try:
