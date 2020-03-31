@@ -70,6 +70,7 @@ class FileStorage:
     def delete(self, obj=None):
         """ Delete an object if exists
         """
-        key = "{}.{}".format(type(obj).__name__, obj.id)
-        if self.__objects[key]:
-            del self.__objects[key]
+        if obj:
+            key = "{}.{}".format(type(obj).__name__, obj.id)
+            if self.__objects[key]:
+                del self.__objects[key]
