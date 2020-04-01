@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """This is the place class"""
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
 
 
-class Place(BaseModel):
+class Place(BaseModel, Base):
     """This is the class for Place
     Attributes:
         city_id: city id
@@ -18,7 +18,8 @@ class Place(BaseModel):
         longitude: longitude in float
         amenity_ids: list of Amenity ids
     """
-    city_id = ""
+    # FIX: Place to DBStorage
+    """city_id = ""
     user_id = ""
     name = ""
     description = ""
@@ -28,4 +29,53 @@ class Place(BaseModel):
     price_by_night = 0
     latitude = 0.0
     longitude = 0.0
-    amenity_ids = []
+    amenity_ids = []"""
+
+    # class attribute __tablename__
+    __tablename__ = 'places'
+
+    # class attribute city_id
+    city_id = Column(String(60),
+                     ForeignKey('cities.id'),
+                     nullable=False)
+
+    # class attribute user_id
+    user_id = Column(String(60),
+                     ForeignKey('users.id'),
+                     nullable=False)
+
+    # class attribute name
+    name = Column(String(128),
+                  nullable=False)
+
+    # class attribute description
+    description = Column(String(1024),
+                         nullable=True)
+
+    # class attribute number_rooms
+    number_rooms = Column(Integer,
+                          nullable=False,
+                          default=0)
+
+    # class attribute number_bathrooms
+    number_bathrooms = Column(Integer,
+                              nullable=False,
+                              default=0)
+
+    # class attribute max_guest
+    max_guest = Column(Integer,
+                       nullable=False,
+                       default=0)
+
+    # class attribute price_by_night
+    price_by_night = Column(Integer,
+                            nullable=False,
+                            default=0)
+
+    # class attribute latitude
+    latitude = Column(Float,
+                      nullable=True)
+
+    # class attribute longitude
+    longitude = Column(Float,
+                       nullable=True)
