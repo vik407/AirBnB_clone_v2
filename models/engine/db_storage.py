@@ -22,10 +22,10 @@ class DBStorage:
 
     def __init__(self):
         """Constructor"""
-        mysql_user = getenv(HBNB_MYSQL_USER)
-        mysql_password = getenv(HBNB_MYSQL_PWD)
-        mysql_host = getenv(HBNB_MYSQL_HOST)
-        mysql_database = getenv(HBNB_MYSQL_DB)
+        mysql_user = getenv('HBNB_MYSQL_USER')
+        mysql_password = getenv('HBNB_MYSQL_PWD')
+        mysql_host = getenv('HBNB_MYSQL_HOST')
+        mysql_database = getenv('HBNB_MYSQL_DB')
         # FIX: Create the engine  (self.__engine)
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}:3306/{}'
                                       .format(mysql_user, mysql_password,
