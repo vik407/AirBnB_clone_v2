@@ -2,6 +2,7 @@
 """This is the user class"""
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey
+from sqlalchemy.orm import relationship
 
 
 class User(BaseModel, Base):
@@ -29,3 +30,8 @@ class User(BaseModel, Base):
                         nullable=True)
     last_name = Column(String(128),
                        nullable=True)
+
+    # FIX: relationship representation with class Place
+    places = relationship("Place",
+                          backref="user",
+                          cascade="all, delete-orphan")
