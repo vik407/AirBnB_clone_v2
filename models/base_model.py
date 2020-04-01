@@ -91,6 +91,6 @@ class BaseModel:
         my_dict["created_at"] = self.created_at.isoformat()
         my_dict["updated_at"] = self.updated_at.isoformat()
         # Fix: remove the key _sa_instance_state
-        # if "_sa_instance_state" in my_dict.keys():
-        #    del (my_dict[_sa_instance_state])
+        if my_dict["_sa_instance_state"]:
+            del my_dict["_sa_instance_state"]
         return my_dict
