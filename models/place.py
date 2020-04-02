@@ -2,7 +2,12 @@
 """This is the place class"""
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, Table
+from sqlalchemy.orm import relationship
 
+
+place_amenity = Table('place_amenity', Base.metadata,
+    Column('place_id', String(60), primary_key=True, nullable=False),
+    Column('amenity_id', String(60), primary_key=True, nullable=False))
 
 class Place(BaseModel, Base):
     """This is the class for Place
@@ -80,3 +85,15 @@ class Place(BaseModel, Base):
     # class attribute longitude
     longitude = Column(Float,
                        nullable=True)
+
+    # relationship
+    amenities = relationship('models.amenity.Amenity',
+                secondary=place_amenity,
+                viewonly=False)
+
+    @property
+    def amenities(self):
+        return amenities
+        
+    @amenities.setter
+    def amenities(self, value):

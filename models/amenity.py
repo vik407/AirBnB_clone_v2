@@ -18,5 +18,5 @@ class Amenity(BaseModel):
     name = Column(String(128),
                   nullable=False)
 
-    place_amenities = relationship("Place",
+    place_amenities = relationship("models.place.Place",
                                    secondary=place_amenity)
