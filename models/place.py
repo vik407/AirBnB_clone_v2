@@ -86,14 +86,17 @@ class Place(BaseModel, Base):
     longitude = Column(Float,
                        nullable=True)
 
-    # relationship
-    amenities = relationship('models.amenity.Amenity',
-                secondary=place_amenity,
-                viewonly=False)
-
+    # Relationship with review
+    reviews = relationship("models.review.Review",
+                            backref="place",
+                            cascade="all, delete")
+    
+    # Getter of reviews
     @property
-    def amenities(self):
-        return amenities
-        
-    @amenities.setter
-    def amenities(self, value):
+    def reviews(self):
+        pass
+        revs = []
+        for review in self.reviews:
+            if review.place_id == self.id:
+                revs.append(review)
+        return (_reviews)
