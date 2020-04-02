@@ -35,3 +35,8 @@ class User(BaseModel, Base):
     places = relationship("Place",
                           backref="user",
                           cascade="all, delete-orphan")
+
+    # Relationship with review
+    reviews = relationship("models.review.Review",
+                            backref="user",
+                            cascade="all, delete-orphan")
