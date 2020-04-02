@@ -5,6 +5,7 @@ import os
 from models.user import User
 from models.base_model import BaseModel
 import pep8
+import MySQLdb
 
 
 class TestUser(unittest.TestCase):
@@ -62,15 +63,47 @@ class TestUser(unittest.TestCase):
         self.assertEqual(type(self.user.first_name), str)
         self.assertEqual(type(self.user.first_name), str)
 
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db', "DB")
     def test_save_User(self):
         """test if the save works"""
         self.user.save()
         self.assertNotEqual(self.user.created_at, self.user.updated_at)
 
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db', "DB")
     def test_to_dict_User(self):
         """test if dictionary works"""
         self.assertEqual('to_dict' in dir(self.user), True)
 
+    # MySQL tests
+    # Start connection
+    def connection(self):
+        """ Connect to db """
+        # Getting environment variables
+        mysql_user = os.getenv('HBNB_MYSQL_USER')
+        mysql_password = os.getenv('HBNB_MYSQL_PWD')
+        mysql_host = os.getenv('HBNB_MYSQL_HOST')
+        mysql_database = os.getenv('HBNB_MYSQL_DB')
+        # Connection
+        conn = MySQLdb.connect(host=mysql_host,
+                               port=3306,
+                               user=mysql_user,
+                               passwd=mysql_password,
+                               db=mysql_database,
+                               charset="utf8")
+        return conn
+
+    def test_to_user_attributes(self):
+        """ Test user attributes on db """
+        conn = self.connection()
+        cur = conn.cursor()
+        current = cur.execute("SELECT * FROM users")
+        new = User()
+        cur.close()
+        cur = conn.cursor()
+        after = cur.execute("SELECT * FROM users")
+        self.assertEqual(current, after)
+        cur.close()
+        conn.close()
 
 if __name__ == "__main__":
     unittest.main()
