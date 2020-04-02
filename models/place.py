@@ -3,6 +3,7 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
+from os import getenv
 
 
 place_amenity = Table('place_amenity', Base.metadata,
@@ -86,14 +87,34 @@ class Place(BaseModel, Base):
     longitude = Column(Float,
                        nullable=True)
 
-    # relationship
-    amenities = relationship('models.amenity.Amenity',
-                secondary=place_amenity,
-                viewonly=False)
+    # relationships
+    reviews = relationship("Review",
+                           backref="place",
+                           cascade="all, delete-orphan")
 
-    @property
-    def amenities(self):
-        return amenities
-        
-    @amenities.setter
-    def amenities(self, value):
+    amenity_ids = []
+
+    if getenv('HBNB_TYPE_STORAGE') == 'file':
+        @property
+        def amenities(self):
+            """Get and return a list of Amenity instances"""
+            res = []
+            for obj in amenity_ids:
+                if obj.id == self.id:
+                    res.append(obj)
+            return res
+        @amenities.setter
+        def amenities(self, value):
+            """Add amenities to the amenity_ids obj"""
+            if type(obj).__name__ == 'Amenity':
+                self.amenity_ids.append(obj)
+    elif getenv('HBNB_TYPE_STORAGE') == 'db':
+        @property
+        def reviews(self):
+            res = []
+            for review in self.reviews:
+                if review.place_id == self.id:
+                    res.append(review)
+            return(res)
+        amenities = relationship("Amenity",
+                                 secondary=place_amenity)
