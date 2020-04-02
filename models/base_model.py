@@ -4,7 +4,7 @@ import uuid
 import models
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime
 
 Base = declarative_base()
 
@@ -45,6 +45,8 @@ class BaseModel:
                 if key != "__class__" and hasattr(self, key):
                     setattr(self, key, value)
                 # FIX: for new instance on created at and update at
+                if self.id is None:
+                    setattr(self, 'id', str(uuid.uuid4()))
                 if self.created_at is None:
                     self.created_at = datetime.now()
                 if self.updated_at is None:
@@ -60,7 +62,7 @@ class BaseModel:
             returns a string of class name, id, and dictionary
         """
         return "[{}] ({}) {}".format(
-            type(self).__name__, self.id, self.__dict__)
+            type(self).__name__, self.id, self.to_dict())
 
     def __repr__(self):
         """return a string representation
@@ -71,7 +73,6 @@ class BaseModel:
         """updates the public instance attribute updated_at to current
         """
         self.updated_at = datetime.now()
-        # FIX: Moved
         models.storage.new(self)
         models.storage.save()
 

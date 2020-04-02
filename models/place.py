@@ -34,19 +34,6 @@ class Place(BaseModel, Base):
         longitude: longitude in float
         amenity_ids: list of Amenity ids
     """
-    # FIX: Place to DBStorage
-    """city_id = ""
-    user_id = ""
-    name = ""
-    description = ""
-    number_rooms = 0
-    number_bathrooms = 0
-    max_guest = 0
-    price_by_night = 0
-    latitude = 0.0
-    longitude = 0.0
-    amenity_ids = []"""
-
     # class attribute __tablename__
     __tablename__ = 'places'
 
@@ -114,10 +101,11 @@ class Place(BaseModel, Base):
             return res
 
         @amenities.setter
-        def amenities(self, value):
+        def amenities(self, obj):
             """Add amenities to the amenity_ids obj"""
             if type(obj).__name__ == 'Amenity':
                 self.amenity_ids.append(obj)
+
     elif getenv('HBNB_TYPE_STORAGE') == 'db':
         @property
         def reviews(self):
@@ -126,6 +114,6 @@ class Place(BaseModel, Base):
                 if review.place_id == self.id:
                     res.append(review)
             return(res)
+
         amenities = relationship("Amenity",
-                                 secondary=place_amenity,
-                                 viewonly=False)
+                                 secondary=place_amenity)
