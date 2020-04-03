@@ -71,3 +71,130 @@ class TestConsole(unittest.TestCase):
         with patch('sys.stdout', new=StringIO()) as f:
             self.consol.onecmd("quit")
             self.assertEqual('', f.getvalue())
+
+    @unittest.skipIf(os.getenv("HBNB_TYPE_STORAGE") == "db",
+                     "can't run")
+    def test_create(self):
+        """Test create command inpout"""
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("create")
+            self.assertEqual(
+                "** class name missing **\n", f.getvalue())
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("create asdfsfsd")
+            self.assertEqual(
+                "** class doesn't exist **\n", f.getvalue())
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("create User")
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("all User")
+            self.assertEqual(
+                "[[User]", f.getvalue()[:7])
+
+    @unittest.skipIf(os.getenv("HBNB_TYPE_STORAGE") == "db",
+                     "can't run")
+    def test_show(self):
+        """Test show command inpout"""
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("show")
+            self.assertEqual(
+                "** class name missing **\n", f.getvalue())
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("show asdfsdrfs")
+            self.assertEqual(
+                "** class doesn't exist **\n", f.getvalue())
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("show BaseModel")
+            self.assertEqual(
+                "** instance id missing **\n", f.getvalue())
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("show BaseModel abcd-123")
+            self.assertEqual(
+                "** no instance found **\n", f.getvalue())
+
+    @unittest.skipIf(os.getenv("HBNB_TYPE_STORAGE") == "db", "can't run")
+    def test_destroy(self):
+        """Test destroy command inpout"""
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("destroy")
+            self.assertEqual(
+                "** class name missing **\n", f.getvalue())
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("destroy Galaxy")
+            self.assertEqual(
+                "** class doesn't exist **\n", f.getvalue())
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("destroy User")
+            self.assertEqual(
+                "** instance id missing **\n", f.getvalue())
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("destroy BaseModel 12345")
+            self.assertEqual(
+                "** no instance found **\n", f.getvalue())
+
+    @unittest.skipIf(os.getenv("HBNB_TYPE_STORAGE") == "db", "can't run")
+    def test_all(self):
+        """Test all command inpout"""
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("all asdfsdfsd")
+            self.assertEqual("** class doesn't exist **\n", f.getvalue())
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("all State")
+            self.assertEqual("[]\n", f.getvalue())
+
+    @unittest.skipIf(os.getenv("HBNB_TYPE_STORAGE") == "db", "can't run")
+    def test_destroy(self):
+        """Test destroy command inpout"""
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("destroy")
+            self.assertEqual(
+                "** class name missing **\n", f.getvalue())
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("destroy Galaxy")
+            self.assertEqual(
+                "** class doesn't exist **\n", f.getvalue())
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("destroy User")
+            self.assertEqual(
+                "** instance id missing **\n", f.getvalue())
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("destroy BaseModel 12345")
+            self.assertEqual(
+                "** no instance found **\n", f.getvalue())
+
+    @unittest.skipIf(os.getenv("HBNB_TYPE_STORAGE") == "db", "can't run")
+    def test_update(self):
+        """Test update command inpout"""
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("update")
+            self.assertEqual(
+                "** class name missing **\n", f.getvalue())
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("update sldkfjsl")
+            self.assertEqual(
+                "** class doesn't exist **\n", f.getvalue())
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("update User")
+            self.assertEqual(
+                "** instance id missing **\n", f.getvalue())
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("update User 12345")
+            self.assertEqual(
+                "** no instance found **\n", f.getvalue())
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("all User")
+            obj = f.getvalue()
+        my_id = obj[obj.find('(')+1:obj.find(')')]
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("update User " + my_id)
+            self.assertEqual(
+                "** attribute name missing **\n", f.getvalue())
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("update User " + my_id + " Name")
+            self.assertEqual(
+                "** value missing **\n", f.getvalue())
+
+
+if __name__ == "__main__":
+    if os.getenv("HBNB_TYPE_STORAGE") != "db":
+        unittest.main()
