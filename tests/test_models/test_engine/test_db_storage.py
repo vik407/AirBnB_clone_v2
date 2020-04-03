@@ -28,6 +28,7 @@ class TestDBStorage(unittest.TestCase):
                                       os.getenv("HBNB_MYSQL_PWD"),
                                       os.getenv("HBNB_MYSQL_DB"))
             self.cursor = self.db.cursor()
+
     @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') != 'db', "DB")
     def tearDown(self):
         """Close db"""
