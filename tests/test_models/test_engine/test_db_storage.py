@@ -7,6 +7,7 @@ from models.city import City
 from models.review import Review
 import MySQLdb
 import pep8
+import json
 from models.base_model import BaseModel
 from models.user import User
 from models.amenity import Amenity

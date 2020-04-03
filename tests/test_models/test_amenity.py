@@ -21,6 +21,7 @@ class TestAmenity(unittest.TestCase):
         """at the end of the test this will tear it down"""
         del cls.amenity
 
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') != 'db', "DB")
     def tearDown(self):
         """teardown"""
         try:
