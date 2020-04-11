@@ -27,33 +27,35 @@ def do_deploy(archive_path):
     # Uncompress the archive to the folder
     # /data/web_static/releases/<archive filename without extension>
     # on the web server
-    c = run('tar -xzf /tmp/' + archive_file + '.tgz' +
-            ' -C /data/web_static/releases/' + archive_file + '/')
-    if c.failed:
+    d_unpack = run('tar -xzf /tmp/' + archive_file + '.tgz' +
+                   ' -C /data/web_static/releases/' + archive_file + '/')
+    if d_unpack.failed:
         ret_value = False
     # Delete the archive from the web server
-    d = run('rm /tmp/' + archive_file + '.tgz')
-    if d.failed:
+    d_cleanfile = run('rm /tmp/' + archive_file + '.tgz')
+    if d_cleanfile.failed:
         ret_value = False
     # The files are created under a web_static folder move it.
-    e = run('mv /data/web_static/releases/' + archive_file +
-            '/web_static/* /data/web_static/releases/' + archive_file + '/')
-    if e.failed:
+    d_move = run('mv /data/web_static/releases/' + archive_file +
+                 '/web_static/* /data/web_static/releases/' + archive_file +
+                 '/')
+    if d_move.failed:
         ret_value = False
     # Remove the now empty folder
-    f = run('rm -rf /data/web_static/releases/' + archive_file + '/web_static')
-    if f.failed:
+    d_cleanfolder = run('rm -rf /data/web_static/releases/' + archive_file +
+                        '/web_static')
+    if d_cleanfolder.failed:
         ret_value = False
     # Delete the symbolic link /data/web_static/current from the web server
-    g = run('rm -rf /data/web_static/current')
-    if g.failed:
+    d_removeold = run('rm -rf /data/web_static/current')
+    if d_removeold.failed:
         ret_value = False
-    # Create a new the symbolic link /data/web_static/current on the web server,
-    # linked to the new version of your code
+    # Create a new the symbolic link /data/web_static/current on the
+    # web server, linked to the new version of your code
     # (/data/web_static/releases/<archive filename without extension>)
-    h = run('ln -sf /data/web_static/releases/' + archive_file +
-            '/' + ' /data/web_static/current')
-    if h.failed:
+    d_createnew = run('ln -sf /data/web_static/releases/' + archive_file +
+                      '/' + ' /data/web_static/current')
+    if d_createnew.failed:
         ret_value = False
     # All set
     if ret_value:
