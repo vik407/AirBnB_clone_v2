@@ -1,12 +1,25 @@
 #!/usr/bin/python3
-"""Fabric script (based on the file 1-pack_web_static.py) that distributes an
-archive to your web servers, using the function do_deploy:
+"""Fabric script (based on the file 2-do_deploy_web_static.py) that distributes
+an archive to your web servers, using the function do_deploy:
 """
 from fabric.api import *
 from os import path
-from 1-pack_web_static import do_pack
+from datetime import datetime
+
 
 env.hosts = ['52.200.131.229', '54.146.160.217']
+
+
+def do_pack():
+    """Function to pack the contents of web_static folder
+    """
+    bak_file = 'versions/web_static_{:s}.tgz'\
+               .format(datetime.now().strftime("%Y%m%d%H%M%S"))
+    local('mkdir -p versions')
+    command = local("tar -cvzf " + bak_file + " ./web_static/")
+    if command.succeeded:
+        return bak_file
+    return None
 
 
 def do_deploy(archive_path):
@@ -67,7 +80,7 @@ def do_deploy(archive_path):
 def deploy():
     """Distribute to all servers
     """
-    arch_path = do_pack()
-    if arch_path is None:
+    archive_path = do_pack()
+    if archive_path is None:
         return False
-    return do_deploy(arch_path)
+    return do_deploy(archive_path)
