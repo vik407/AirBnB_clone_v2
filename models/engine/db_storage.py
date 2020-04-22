@@ -86,7 +86,6 @@ class DBStorage:
                                               expire_on_commit=False))
         self.__session = session()
 
-
     def close(self):
         """Add a public method def close(self):: call remove() method on
         the private session attribute (self.__session) tips or close() on
